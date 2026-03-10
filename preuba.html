@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R.A.M.S. AI TERMINAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+    <style>
+        :root { --pri: #ff3b14; --bg: #000; --pan: rgba(10, 10, 10, 0.85); --bd: #7a1a08; --txt: #ff3b14; --txt-d: #8b1a08; --f1: 'Share Tech Mono', monospace; --f2: 'Orbitron', sans-serif; --glw: 0 0 8px #ff3b14; --rad: 0px; --shd: none; --scn: block; }
+        body.jarvis { --pri: #00e5ff; --bg: #000510; --pan: rgba(0, 25, 50, 0.6); --bd: #00b0ff; --txt: #e0ffff; --txt-d: #0088cc; --f1: 'Orbitron', sans-serif; --f2: 'Orbitron', sans-serif; --glw: 0 0 10px #00e5ff, inset 0 0 15px rgba(0,229,255,0.2); --rad: 8px; --shd: 0 0 20px rgba(0,229,255,0.1); --scn: none; }
+        body.minimal { --pri: #3b82f6; --bg: #f1f5f9; --pan: #ffffff; --bd: #cbd5e1; --txt: #1e293b; --txt-d: #64748b; --f1: -apple-system,blinkmacsystemfont,'Segoe UI',Roboto,sans-serif; --f2: -apple-system,blinkmacsystemfont,'Segoe UI',Roboto,sans-serif; --glw: none; --rad: 12px; --shd: 0 4px 15px rgba(0,0,0,0.05); --scn: none; }
+        body.eva01 { --pri: #76ff03; --bg: #1a0033; --pan: rgba(26,0,51,0.8); --bd: #9c27b0; --txt: #76ff03; --txt-d: #4caf50; --f1: 'Share Tech Mono', monospace; --f2: 'Orbitron', sans-serif; --glw: 0 0 12px #76ff03, inset 0 0 8px #9c27b0; --rad: 4px; --shd: none; --scn: block; }
+        body.custom { background-image: none; }
+
+        body { margin: 0; padding: 0; overflow: hidden; background: var(--bg); color: var(--txt); font-family: var(--f1); font-size: 12px; transition: all 0.3s; }
+        body.nerv { background-image: linear-gradient(rgba(255,59,20,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,59,20,0.05) 1px, transparent 1px); background-size: 20px 20px; }
+        body.jarvis { background-image: radial-gradient(circle at 50% 50%, rgba(0,229,255,0.05) 0%, transparent 60%); }
+        body.eva01 { background-image: repeating-linear-gradient(45deg, rgba(156,39,176,0.1) 0px, rgba(156,39,176,0.1) 2px, transparent 2px, transparent 10px); }
+
+        .scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: var(--scn); background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; }
+        .grid { display: grid; grid-template-columns: 260px 1fr 260px; grid-template-rows: auto 1fr auto; gap: 12px; padding: 12px; height: 100vh; position: relative; z-index: 10; box-sizing: border-box; }
+        .col { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+        .panel { background: var(--pan); border: 1px solid var(--bd); border-radius: var(--rad); box-shadow: var(--shd), var(--glw); display: flex; flex-direction: column; padding: 10px; position: relative; overflow: hidden; transition: all 0.3s; }
+        body.nerv .panel::before, body.nerv .panel::after { content: ''; position: absolute; width: 10px; height: 10px; border-style: solid; border-color: var(--pri); }
+        body.nerv .panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        body.nerv .panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+        .pt { font-family: var(--f2); font-size: 13px; font-weight: bold; letter-spacing: 1px; border-bottom: 1px dashed var(--bd); padding-bottom: 5px; margin-bottom: 10px; color: var(--txt); text-transform: uppercase; flex-shrink: 0; }
+        .hdr { grid-column: 1/4; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--pri); padding-bottom: 10px; }
+        .ht { font-family: var(--f2); font-size: 24px; font-weight: 900; text-shadow: var(--glw); letter-spacing: 2px; display:flex; align-items:center; gap:15px; }
+        .hi { display: flex; align-items: center; gap: 15px; }
+        select { background: var(--pan); color: var(--pri); border: 1px solid var(--pri); padding: 5px; font-family: var(--f1); font-weight: bold; border-radius: var(--rad); outline: none; cursor: pointer; box-shadow: var(--glw); }
+        select:hover { background: var(--pri); color: var(--bg); }
+        .bar-r { margin-bottom: 8px; }
+        .bar-l { display: flex; justify-content: space-between; margin-bottom: 2px; font-size: 11px; }
+        .bar-t { width: 100%; height: 6px; background: rgba(128,128,128,0.2); border-radius: var(--rad); overflow: hidden; position: relative; }
+        .bar-f { height: 100%; background: var(--pri); transition: width 0.5s ease; box-shadow: var(--glw); position: relative; }
+        .bar-f::after { content: ''; position: absolute; right: 0; top: 0; width: 3px; height: 100%; background: #fff; opacity: 0.8; box-shadow: 0 0 6px #fff; }
+        .bar-temp-warn .bar-f { background: #f39c12; box-shadow: 0 0 8px #f39c12; }
+        .bar-temp-hot .bar-f { background: #e74c3c; box-shadow: 0 0 8px #e74c3c; animation: temp-pulse 0.8s infinite alternate; }
+        @keyframes temp-pulse { to { opacity: 0.6; } }
+
+        /* GPU nombre badge */
+        .gpu-badge { font-size: 9px; color: var(--txt-d); letter-spacing: 1px; margin-top: -4px; margin-bottom: 6px; opacity: 0.7; }
+
+        .li { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--bd); padding: 4px 0; font-size: 11px; }
+        .li:last-child { border: none; }
+        .ok { color: #2ecc71; text-shadow: 0 0 5px #2ecc71; }
+        .wr { color: #f1c40f; text-shadow: 0 0 5px #f1c40f; }
+        .er { color: #e74c3c; text-shadow: 0 0 5px #e74c3c; }
+        .ac { color: #3498db; text-shadow: 0 0 5px #3498db; }
+        .vc-w { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .vc-d { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 15px; }
+        .vc-img { max-width: 100%; max-height: 100%; border-radius: var(--rad); object-fit: contain; display: none; }
+        model-viewer { width: 100%; height: 100%; display: none; background-color: transparent; --poster-color: transparent; }
+        .vc-s { font-weight: bold; font-family: var(--f2); letter-spacing: 2px; animation: blink 1s infinite alternate; margin-bottom: 15px; }
+        @keyframes blink { to { opacity: 0.3; } }
+        .vc-bs { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; }
+        .btn { background: transparent; border: 1px solid var(--bd); color: var(--txt-d); padding: 4px 8px; cursor: pointer; font-family: var(--f1); font-size: 10px; border-radius: var(--rad); transition: 0.2s; }
+        .btn:hover { background: rgba(255,255,255,0.1); }
+        .btn.a { background: var(--pri); color: var(--bg); border-color: var(--pri); box-shadow: var(--glw); }
+        .btn.dsgn { border-color: #f39c12; color: #f39c12; width: 100%; margin-top: 5px; font-weight:bold; }
+        .btn.dsgn:hover { background: #f39c12; color: #000; box-shadow: 0 0 10px #f39c12; }
+        .file-in { display: none; }
+        .cube-w { width: 80px; height: 80px; perspective: 400px; }
+        .cb { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: spin 4s infinite linear; }
+        .cb div { position: absolute; width: 80px; height: 80px; border: 2px solid var(--pri); box-shadow: 0 0 10px var(--pri); background: rgba(0,0,0,0.5); }
+        .fr { transform: translateZ(40px); } .bk { transform: rotateY(180deg) translateZ(40px); }
+        .rt { transform: rotateY(90deg) translateZ(40px); } .lt { transform: rotateY(-90deg) translateZ(40px); }
+        .tp { transform: rotateX(90deg) translateZ(40px); } .bm { transform: rotateX(-90deg) translateZ(40px); }
+        @keyframes spin { from { transform: rotateX(0) rotateY(0); } to { transform: rotateX(360deg) rotateY(360deg); } }
+        .trm { grid-column: 1/4; display: flex; align-items: center; background: var(--pan); border: 1px solid var(--bd); padding: 8px 12px; border-radius: var(--rad); box-shadow: var(--shd), var(--glw); }
+        .trm-prefix { font-weight: bold; color: var(--pri); margin-right: 15px; }
+        .ti { flex-grow: 1; background: transparent; border: none; outline: none; color: var(--txt); font-family: var(--f1); font-size: 14px; }
+        .sa { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+        .sa::-webkit-scrollbar { width: 3px; }
+        .sa::-webkit-scrollbar-thumb { background: var(--pri); }
+        .ll { margin-bottom: 4px; display: flex; }
+        .l-ts { opacity: 0.6; margin-right: 8px; flex-shrink: 0; }
+        .cp { display: none; align-items: center; gap: 5px; margin-right: 20px; }
+        body.minimal .cp { display: flex; font-weight: bold; }
+        input[type="color"] { border: 1px solid var(--bd); width: 24px; height: 24px; border-radius: 4px; cursor: pointer; padding: 0; background: transparent; }
+        input[type="text"].api-in { background:rgba(0,0,0,0.5); border:1px solid var(--bd); color:var(--txt); padding:8px; width:70%; font-family:var(--f1); border-radius:var(--rad); outline:none; }
+        input[type="text"].api-in:focus { border-color:var(--pri); box-shadow:var(--glw); }
+
+        /* ═══════════════════════════════════════════
+           THOUGHT VISUALIZER MEJORADO
+        ═══════════════════════════════════════════ */
+        #tv { display: flex; flex-direction: column; gap: 4px; }
+        .tv-entry { opacity: 0; transform: translateX(-12px); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); font-size: 11px; padding: 5px 8px; border-left: 2px solid var(--bd); background: rgba(255,59,20,0.04); position: relative; }
+        .tv-entry.visible { opacity: 1; transform: translateX(0); }
+        .tv-entry.tv-thinking { border-left-color: #3498db; color: #3498db; }
+        .tv-entry.tv-action  { border-left-color: #f39c12; color: #f39c12; }
+        .tv-entry.tv-success { border-left-color: #2ecc71; color: #2ecc71; }
+        .tv-entry.tv-error   { border-left-color: #e74c3c; color: #e74c3c; }
+        .tv-entry.tv-neutral { border-left-color: var(--bd); color: var(--txt-d); }
+        .tv-tag { font-size: 9px; opacity: 0.7; font-weight: bold; letter-spacing: 1px; margin-right: 5px; }
+        /* Indicador de "pensando" animado */
+        .tv-loader { display: none; align-items: center; gap: 6px; padding: 5px 8px; color: #3498db; font-size: 11px; }
+        .tv-loader.active { display: flex; }
+        .tv-dots span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #3498db; margin: 0 2px; animation: tv-dot 1.2s infinite; }
+        .tv-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .tv-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tv-dot { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+        /* Barra de progreso de pensamiento */
+        .tv-progress-bar { height: 2px; background: rgba(52,152,219,0.3); border-radius: 1px; margin: 2px 0; overflow: hidden; }
+        .tv-progress-fill { height: 100%; background: #3498db; width: 0%; transition: width 0.3s; box-shadow: 0 0 6px #3498db; }
+
+        /* Modales */
+        .modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .dm-content { background: var(--pan); border: 2px solid var(--pri); box-shadow: var(--glw); width: 650px; max-width: 95%; height: 420px; display: flex; flex-direction: column; padding: 20px; border-radius: var(--rad); position: relative; }
+        .dm-content.small { height: auto; max-height: 400px; width: 500px; }
+        .dm-hdr { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--pri); padding-bottom: 10px; margin-bottom: 15px; }
+        .dm-title { font-family: var(--f2); font-size: 18px; color: var(--pri); font-weight: bold; }
+        .dm-close { cursor: pointer; color: var(--txt-d); font-weight: bold; font-size: 18px; }
+        .dm-close:hover { color: var(--pri); }
+        .dm-body { display: flex; gap: 20px; flex-grow: 1; overflow: hidden; }
+        .dm-list { flex: 1; border: 1px solid var(--bd); overflow-y: auto; padding: 10px; }
+        .dm-item { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; display: flex; justify-content: space-between; }
+        .dm-item:hover, .dm-item.active { background: rgba(255,255,255,0.1); color: var(--pri); }
+        .dm-preview { flex: 1.2; border: 1px solid var(--bd); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; text-align: center; }
+        .dm-controls { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px dashed var(--bd); padding-top: 15px; }
+        .dm-builder { display: none; width: 100%; text-align: left; border: 1px dashed var(--bd); padding: 15px; box-sizing: border-box; background: rgba(0,0,0,0.3); }
+        .bld-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+        /* ═══════════════════════════════════════════
+           PANTALLA DE ARRANQUE / BOOT SEQUENCE
+        ═══════════════════════════════════════════ */
+        #boot-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+        }
+        /* Grid de fondo del boot */
+        #boot-screen::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,59,20,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,59,20,0.06) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: boot-grid 3s ease-out forwards;
+        }
+        @keyframes boot-grid { from { opacity: 0; } to { opacity: 1; } }
+        /* Scanlines boot */
+        #boot-screen::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.35) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        .boot-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900;
+            color: #ff3b14;
+            text-shadow: 0 0 20px #ff3b14, 0 0 60px rgba(255,59,20,0.5);
+            letter-spacing: 6px;
+            text-align: center;
+            animation: boot-logo-in 0.8s cubic-bezier(0.23,1,0.32,1) 0.3s both;
+            position: relative; z-index: 1;
+        }
+        .boot-logo-sub {
+            font-size: clamp(10px, 1.5vw, 14px);
+            color: #ff9d00;
+            letter-spacing: 8px;
+            text-align: center;
+            margin-top: 8px;
+            animation: boot-logo-in 0.8s cubic-bezier(0.23,1,0.32,1) 0.6s both;
+            position: relative; z-index: 1;
+        }
+        @keyframes boot-logo-in {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .boot-divider {
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #ff3b14, transparent);
+            margin: 24px auto;
+            animation: boot-line 0.7s ease-out 1s both;
+            position: relative; z-index: 1;
+        }
+        @keyframes boot-line { to { width: min(500px, 80vw); } }
+
+        .boot-console {
+            width: min(520px, 85vw);
+            font-size: 12px;
+            color: #ff3b14;
+            line-height: 1.8;
+            position: relative; z-index: 1;
+            min-height: 200px;
+        }
+        .boot-line-item {
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            gap: 10px;
+        }
+        .boot-line-item.show { opacity: 1; transform: translateX(0); }
+        .boot-ok   { color: #2ecc71; }
+        .boot-warn { color: #f39c12; }
+        .boot-err  { color: #e74c3c; }
+        .boot-dim  { color: #5a1a08; }
+
+        /* Barra de progreso boot */
+        .boot-progress-wrap {
+            width: min(520px, 85vw);
+            margin-top: 20px;
+            position: relative; z-index: 1;
+        }
+        .boot-progress-label {
+            display: flex; justify-content: space-between;
+            font-size: 11px; color: #ff9d00; margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .boot-progress-bar {
+            width: 100%; height: 8px;
+            background: rgba(255,59,20,0.12);
+            border: 1px solid rgba(255,59,20,0.4);
+            position: relative; overflow: hidden;
+        }
+        .boot-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7a1a08, #ff3b14, #ff9d00);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 0 12px #ff3b14;
+        }
+        /* Glitch effect en el logo durante el boot */
+        .boot-logo.glitch {
+            animation: glitch-anim 0.2s steps(2) 3;
+        }
+        @keyframes glitch-anim {
+            0%   { text-shadow: 0 0 20px #ff3b14, -3px 0 #00e5ff, 3px 0 #ff3b14; }
+            50%  { text-shadow: 0 0 20px #ff3b14, 3px 0 #00e5ff, -3px 0 #ff9d00; clip-path: inset(30% 0 40% 0); }
+            100% { text-shadow: 0 0 20px #ff3b14, 0 0 60px rgba(255,59,20,0.5); }
+        }
+        /* Fade out del boot */
+        #boot-screen.exit {
+            animation: boot-exit 0.7s cubic-bezier(0.7,0,1,1) forwards;
+        }
+        @keyframes boot-exit {
+            0%   { opacity: 1; transform: scale(1); filter: brightness(1); }
+            50%  { opacity: 1; transform: scale(1.03); filter: brightness(2); }
+            100% { opacity: 0; transform: scale(0.97); filter: brightness(0); pointer-events: none; }
+        }
+        /* Partículas del boot */
+        .boot-particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #ff3b14;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 4px #ff3b14;
+            animation: particle-float linear both;
+        }
+        @keyframes particle-float {
+            from { transform: translateY(100vh) scale(1); opacity: 0.8; }
+            to   { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body class="nerv">
+    <div class="scanlines"></div>
+
+    <!-- ╔══════════════════════════════════════════════╗
+         ║         BOOT SEQUENCE OVERLAY               ║
+         ╚══════════════════════════════════════════════╝ -->
+    <div id="boot-screen">
+        <div class="boot-logo" id="boot-logo">R.A.M.S.</div>
+        <div class="boot-logo-sub">REACTIVE AUTONOMOUS MACHINE SYSTEM &nbsp;·&nbsp; V2.0</div>
+        <div class="boot-divider"></div>
+        <div class="boot-console" id="boot-console"></div>
+        <div class="boot-progress-wrap">
+            <div class="boot-progress-label">
+                <span id="boot-status-txt">INICIALIZANDO...</span>
+                <span id="boot-pct">0%</span>
+            </div>
+            <div class="boot-progress-bar">
+                <div class="boot-progress-fill" id="boot-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔══════════════════════════════════════════════╗
+         ║              MAIN HUD                       ║
+         ╚══════════════════════════════════════════════╝ -->
+    <div class="grid" id="main-hud" style="opacity:0; transition: opacity 0.6s;">
+
+        <div class="hdr">
+            <div class="ht">
+                R.A.M.S. AI SYSTEM
+                <button class="btn" style="border-color:var(--pri); color:var(--pri); padding:5px 10px;" onclick="openIntegrations()">[ 🔗 INTEGRACIONES ]</button>
+            </div>
+            <div class="hi">
+                <div id="clk" style="font-weight:bold; font-size:16px;"></div>
+                <div class="ok" id="main-status" style="font-weight:bold;">STATUS: NOMINAL</div>
+                <div class="cp">COLOR: <input type="color" id="clr" value="#3b82f6"></div>
+                <select id="th-sel">
+                    <option value="nerv">NERV MODE</option>
+                    <option value="jarvis">JARVIS MODE</option>
+                    <option value="minimal">MINIMAL MODE</option>
+                    <option value="eva01">EVA-01 MODE</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="col">
+            <div class="panel" style="flex:1">
+                <div class="pt">SYS_MONITOR</div>
+                <div class="bar-r">
+                    <div class="bar-l"><span>CPU</span><span id="v-c">—</span></div>
+                    <div class="bar-t"><div class="bar-f" id="b-c" style="width:0%"></div></div>
+                </div>
+                <div class="bar-r">
+                    <div class="bar-l"><span>RAM</span><span id="v-r">—</span></div>
+                    <div class="bar-t"><div class="bar-f" id="b-r" style="width:0%"></div></div>
+                </div>
+                <div class="bar-r" id="bar-gpu-wrap">
+                    <div class="bar-l"><span>GPU</span><span id="v-g">—</span></div>
+                    <div class="bar-t"><div class="bar-f" id="b-g" style="width:0%"></div></div>
+                    <div class="gpu-badge" id="gpu-name">Esperando datos...</div>
+                </div>
+                <div class="bar-r" id="bar-gpu-temp-wrap">
+                    <div class="bar-l">
+                        <span>GPU °C</span>
+                        <span id="v-gt">—</span>
+                    </div>
+                    <div class="bar-t" id="bar-gpu-temp"><div class="bar-f" id="b-gt" style="width:0%"></div></div>
+                </div>
+                <div class="bar-r" id="bar-cpu-temp-wrap">
+                    <div class="bar-l">
+                        <span>CPU °C</span>
+                        <span id="v-ct">—</span>
+                    </div>
+                    <div class="bar-t" id="bar-cpu-temp"><div class="bar-f" id="b-ct" style="width:0%"></div></div>
+                </div>
+                <div style="margin-top:auto; font-size:11px;">UPTIME: <span id="upt" class="ok">00:00:00</span></div>
+            </div>
+            <div class="panel" style="flex:1.5">
+                <div class="pt">SUBAGENTS_PANEL</div>
+                <div class="sa">
+                    <div class="li"><span>CORE_AI</span><span class="ok">ONLINE</span></div>
+                    <div class="li"><span>WEB_AGENT</span><span class="ac">ACTIVE</span></div>
+                    <div class="li"><span>FILE_AGENT</span><span class="wr">IDLE</span></div>
+                    <div class="li"><span>SYSTEM_AGENT</span><span class="ok">ONLINE</span></div>
+                    <div class="li"><span>VOICE_ENGINE</span><span class="ok">RUNNING</span></div>
+                    <div class="li"><span>VISION_MODULE</span><span id="vision-status" class="ac">READY</span></div>
+                </div>
+            </div>
+            <div class="panel" style="flex:1">
+                <div class="pt">PROCESS_MONITOR</div>
+                <div class="sa">
+                    <div class="li"><span>AI_CORE</span><span id="cpu-load-ai">—</span></div>
+                    <div class="li"><span>VOICE_ENGINE</span><span class="ok">RUNNING</span></div>
+                    <div class="li"><span>MEMORY_MGR</span><span class="ac">ACTIVE</span></div>
+                    <div class="li"><span>INPUT_MONITOR</span><span class="wr">STANDBY</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL -->
+        <div class="col">
+            <div class="panel" style="flex:1">
+                <div class="pt" style="text-align:center;">VOICE_CORE</div>
+                <div class="vc-w">
+                    <div class="vc-d" id="vc-d">
+                        <img id="vc-img" class="vc-img" src="">
+                        <model-viewer id="vc-3d" camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+                        <div class="cube-w" id="vc-cb">
+                            <div class="cb">
+                                <div class="fr"></div><div class="bk"></div>
+                                <div class="rt"></div><div class="lt"></div>
+                                <div class="tp"></div><div class="bm"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vc-s" id="vcs">IDLE</div>
+                    <div class="vc-bs">
+                        <button class="btn" onclick="vc('img', this)">IMAGE</button>
+                        <button class="btn" onclick="vc('gif', this)">GIF</button>
+                        <button class="btn a" onclick="vc('3d', this)">3D MODEL</button>
+                        <input type="file" id="fi" class="file-in" accept="image/gif,image/png,image/jpeg,image/webp,.gif,.png,.jpg,.jpeg,.webp,.glb,.gltf">
+                        <button class="btn" onclick="document.getElementById('fi').click()">UPLOAD</button>
+                        <button class="btn dsgn" onclick="openDesignModal()">[ STUDIO DISEÑOS ]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel" style="flex:1.5">
+                <div class="pt">SYSTEM_LOG</div>
+                <div class="sa" id="sl"></div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA -->
+        <div class="col">
+            <div class="panel" style="flex:0.8">
+                <div class="pt">AUDIO_LINK // COMM</div>
+                <div style="display:flex; flex-direction:column; gap:10px; justify-content:center; height:100%; padding:5px;">
+                    <button id="btn-ptt" class="btn" style="padding:10px; font-size:12px; border-color:#2ecc71; color:#2ecc71; text-shadow:0 0 5px #2ecc71;" onclick="activarPTT()">🎙️ PULSAR PARA HABLAR</button>
+                    <button id="btn-always" class="btn" style="padding:10px; font-size:12px;" onclick="toggleOido()">🔴 OÍDO: APAGADO</button>
+                </div>
+            </div>
+            <div class="panel" style="flex:1.2">
+                <div class="pt">OPTIC_SENSOR // CAM</div>
+                <div style="width:100%; height:100%; border:1px solid var(--bd); position:relative; overflow:hidden;">
+                    <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:cover; filter: grayscale(100%) sepia(100%) hue-rotate(300deg) brightness(0.8) contrast(1.5);"></video>
+                    <div class="scanlines"></div>
+                </div>
+                <button class="btn a" style="margin-top:8px; width:100%; font-size:12px; padding:8px;" onclick="capturarDibujo()">[ ESCANEAR PANTALLA / CAM ]</button>
+            </div>
+            <!-- THOUGHT VISUALIZER MEJORADO -->
+            <div class="panel" style="flex:1.3">
+                <div class="pt" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>THOUGHT_VISUALIZER</span>
+                    <button class="btn" onclick="clearThoughts()" style="font-size:9px; padding:2px 6px;">LIMPIAR</button>
+                </div>
+                <!-- Indicador de pensamiento activo -->
+                <div class="tv-loader" id="tv-loader">
+                    <div class="tv-dots"><span></span><span></span><span></span></div>
+                    <span id="tv-action-label">PROCESANDO...</span>
+                </div>
+                <!-- Barra de progreso de pensamiento -->
+                <div class="tv-progress-bar" id="tv-progress-wrap" style="display:none;">
+                    <div class="tv-progress-fill" id="tv-progress-fill"></div>
+                </div>
+                <div class="sa" id="tv" style="margin-top:6px;"></div>
+            </div>
+        </div>
+
+        <div class="trm">
+            <span class="trm-prefix">[ OPERATOR >> ]</span>
+            <input type="file" id="chat-file" style="display:none;" accept="image/*,video/*">
+            <button class="btn" style="margin-right:10px; padding:4px 8px; font-size:12px;" onclick="document.getElementById('chat-file').click()">📎</button>
+            <input type="text" class="ti" id="t-in" autocomplete="off" spellcheck="false" autofocus placeholder="Escribe un comando...">
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    <div class="modal-bg" id="designModal">
+        <div class="dm-content">
+            <div class="dm-hdr">
+                <div class="dm-title">R.A.M.S. STUDIO :: GESTOR DE DISEÑOS</div>
+                <div class="dm-close" onclick="closeDesignModal()">X</div>
+            </div>
+            <div class="dm-body">
+                <div class="dm-list" id="dmList">
+                    <div class="pt" style="font-size:11px;">TUS DISEÑOS</div>
+                    <div class="dm-item active" onclick="selectDesign(this,'Perfil Default','nerv','3d')"><span>[SYS] Base NERV + Cubo 3D</span><span class="ok">ACTIVO</span></div>
+                    <div class="dm-item" onclick="selectDesign(this,'Perfil Jarvis','jarvis','img')"><span>[USR] Azul Stark + Avatar 2D</span><span></span></div>
+                    <div class="dm-item" onclick="selectDesign(this,'Modo Minimalista','minimal','img')"><span>[SYS] Tema Claro (Minimal)</span><span></span></div>
+                    <div class="pt" style="font-size:11px; margin-top:15px;">COMUNIDAD</div>
+                    <div class="dm-item" onclick="selectDesign(this,'Evangelion 01','eva01','gif')"><span>[DL] Tema EVA-01 + GIF</span><span>↓</span></div>
+                    <div class="pt" style="font-size:11px; margin-top:15px;">CREADOR</div>
+                    <div class="dm-item" onclick="openBuilder(this)"><span style="color:#f39c12; font-weight:bold;">[+] CREAR DISEÑO PROPIO</span><span></span></div>
+                </div>
+                <div class="dm-preview">
+                    <div id="dm-preview-box" style="width:100%;">
+                        <div class="pt" style="font-size:11px;">PREVISUALIZACIÓN</div>
+                        <div id="dmPreviewName" style="font-weight:bold; margin-bottom:10px;">Perfil Default</div>
+                        <div style="border:1px dashed var(--bd); padding:20px; width:80%; margin:0 auto;">
+                            <div style="margin-bottom:5px;">TEMA: <span id="dmPreviewTheme" style="color:var(--pri)">NERV</span></div>
+                            <div>AVATAR: <span id="dmPreviewAvatar" style="color:var(--pri)">3D CUBE</span></div>
+                        </div>
+                    </div>
+                    <div id="dm-builder-box" class="dm-builder">
+                        <div class="pt" style="font-size:11px; margin-bottom:15px; text-align:center; border-bottom:1px solid #f39c12; color:#f39c12;">PARÁMETROS PERSONALIZADOS</div>
+                        <div class="bld-row"><label>COLOR PRINCIPAL:</label><input type="color" id="c-color" value="#ff3b14"></div>
+                        <div class="bld-row"><label>COLOR DE FONDO:</label><input type="color" id="c-bg" value="#050000"></div>
+                        <div class="bld-row"><label>TIPOGRAFÍA:</label><select id="c-font" style="width:140px;"><option value="'Share Tech Mono', monospace">Retro (Terminal)</option><option value="'Orbitron', sans-serif">Sci-Fi (Orbitron)</option><option value="sans-serif">Limpio (Sans)</option></select></div>
+                        <div class="bld-row"><label>EFECTO CRT:</label><select id="c-scan" style="width:140px;"><option value="block">ENCENDIDO</option><option value="none">APAGADO</option></select></div>
+                        <div class="bld-row"><label>TIPO DE AVATAR:</label><select id="c-avatar" style="width:140px;"><option value="3d">CUBO 3D</option><option value="img">IMAGEN / GIF</option></select></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dm-controls">
+                <input type="file" id="design-upload" style="display:none;" accept=".json,.txt">
+                <button class="btn" style="margin-right:auto;" onclick="document.getElementById('design-upload').click()">+ IMPORTAR DISEÑO</button>
+                <button class="btn" onclick="closeDesignModal()">CANCELAR</button>
+                <button class="btn a" onclick="applyDesign()">APLICAR Y GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="intModal">
+        <div class="dm-content small">
+            <div class="dm-hdr">
+                <div class="dm-title">R.A.M.S. :: INTEGRACIONES (API)</div>
+                <div class="dm-close" onclick="closeIntegrations()">X</div>
+            </div>
+            <div class="dm-body" style="flex-direction:column; gap:15px; padding-top:10px;">
+                <div class="bld-row"><label style="font-weight:bold; color:var(--pri);">📧 GMAIL:</label><input type="text" class="api-in" id="api-gmail" placeholder="tu_correo@gmail.com"></div>
+                <div class="bld-row"><label style="font-weight:bold; color:var(--pri);">🎵 SPOTIFY KEY:</label><input type="text" class="api-in" id="api-spotify" placeholder="Client ID o Token..."></div>
+            </div>
+            <div class="dm-controls">
+                <button class="btn" onclick="closeIntegrations()">CANCELAR</button>
+                <button class="btn a" onclick="saveIntegrations()">GUARDAR CREDENCIALES</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ═══════════════════════════════════════════════════════
+    //  BOOT SEQUENCE
+    // ═══════════════════════════════════════════════════════
+    const bootLines = [
+        { t: 0,    txt: 'BIOS v4.2 — Checking hardware integrity...', cls: 'boot-dim' },
+        { t: 300,  txt: '[OK] CPU cores detected', cls: 'boot-ok' },
+        { t: 500,  txt: '[OK] RAM banks initialized', cls: 'boot-ok' },
+        { t: 700,  txt: '[OK] GPU adapter found', cls: 'boot-ok' },
+        { t: 950,  txt: 'Loading R.A.M.S. kernel modules...', cls: '' },
+        { t: 1200, txt: '[OK] Neural core: ONLINE', cls: 'boot-ok' },
+        { t: 1450, txt: '[OK] Voice synthesis engine: READY', cls: 'boot-ok' },
+        { t: 1650, txt: '[OK] Vision module: CALIBRATED', cls: 'boot-ok' },
+        { t: 1850, txt: '[OK] Memory vault: DECRYPTED', cls: 'boot-ok' },
+        { t: 2050, txt: '[OK] Spotify bridge: CONNECTED', cls: 'boot-ok' },
+        { t: 2250, txt: '[WARN] pythonnet: using edgechromium fallback', cls: 'boot-warn' },
+        { t: 2500, txt: 'Establishing secure link with operator...', cls: '' },
+        { t: 2800, txt: '[OK] Pywebview bridge: ACTIVE', cls: 'boot-ok' },
+        { t: 3000, txt: '>>> MAGI TERMINAL ONLINE. AWAITING COMMAND.', cls: 'boot-ok' },
+    ];
+
+    const progressSteps = [
+        { t: 200,  pct: 8,   label: 'HARDWARE CHECK...' },
+        { t: 600,  pct: 22,  label: 'LOADING KERNEL...' },
+        { t: 1000, pct: 40,  label: 'NEURAL CORE INIT...' },
+        { t: 1500, pct: 58,  label: 'SUBSYSTEMS READY...' },
+        { t: 2000, pct: 74,  label: 'ENCRYPTING VAULT...' },
+        { t: 2500, pct: 88,  label: 'ESTABLISHING LINK...' },
+        { t: 2900, pct: 100, label: 'BOOT COMPLETE.' },
+    ];
+
+    const bootConsole = document.getElementById('boot-console');
+    const bootFill    = document.getElementById('boot-fill');
+    const bootPct     = document.getElementById('boot-pct');
+    const bootStatus  = document.getElementById('boot-status-txt');
+    const bootLogo    = document.getElementById('boot-logo');
+
+    // Partículas de fondo
+    function spawnParticle() {
+        const p = document.createElement('div');
+        p.className = 'boot-particle';
+        const dur = 2.5 + Math.random() * 3;
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = Math.random() * 2 + 's';
+        p.style.opacity = 0.3 + Math.random() * 0.7;
+        document.getElementById('boot-screen').appendChild(p);
+        setTimeout(() => p.remove(), (dur + 2) * 1000);
+    }
+    const particleInterval = setInterval(spawnParticle, 200);
+
+    // Mostrar líneas de consola
+    bootLines.forEach(line => {
+        setTimeout(() => {
+            const div = document.createElement('div');
+            div.className = 'boot-line-item ' + (line.cls || '');
+            div.textContent = line.txt;
+            bootConsole.appendChild(div);
+            requestAnimationFrame(() => div.classList.add('show'));
+            bootConsole.scrollTop = bootConsole.scrollHeight;
+        }, line.t);
+    });
+
+    // Progreso
+    progressSteps.forEach(step => {
+        setTimeout(() => {
+            bootFill.style.width = step.pct + '%';
+            bootPct.textContent = step.pct + '%';
+            bootStatus.textContent = step.label;
+        }, step.t);
+    });
+
+    // Efecto glitch en el logo
+    setTimeout(() => { bootLogo.classList.add('glitch'); }, 1400);
+    setTimeout(() => { bootLogo.classList.remove('glitch'); }, 1700);
+    setTimeout(() => { bootLogo.classList.add('glitch'); }, 2600);
+    setTimeout(() => { bootLogo.classList.remove('glitch'); }, 2800);
+
+    // Finalizar boot y mostrar HUD
+    setTimeout(() => {
+        clearInterval(particleInterval);
+        document.getElementById('boot-screen').classList.add('exit');
+        document.getElementById('main-hud').style.opacity = '1';
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+        }, 750);
+        lg('⚙️ SISTEMA', 'MAGI Terminal cargado. Enlace con operador establecido.');
+        atv('Sistema inicializado correctamente.', 'success');
+    }, 3500);
+
+
+    // ═══════════════════════════════════════════════════════
+    //  RELOJ Y UPTIME
+    // ═══════════════════════════════════════════════════════
+    const p = n => n < 10 ? '0' + n : n;
+    let u = 0;
+    setInterval(() => {
+        const d = new Date();
+        document.getElementById('clk').textContent = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+        u++;
+        document.getElementById('upt').textContent = `${p(Math.floor(u/3600))}:${p(Math.floor((u%3600)/60))}:${p(u%60)}`;
+    }, 1000);
+
+    // ═══════════════════════════════════════════════════════
+    //  PUENTE PYTHON — updateTelemetry EXTENDIDO
+    //  Python llama: updateTelemetry(cpu, ram, gpu_uso, gpu_temp, cpu_temp, gpu_nombre)
+    // ═══════════════════════════════════════════════════════
+    function updateTelemetry(cpu, ram, gpuUso, gpuTemp, cpuTemp, gpuNombre) {
+        // CPU %
+        if (cpu !== undefined) {
+            document.getElementById('v-c').textContent = Math.round(cpu) + '%';
+            document.getElementById('b-c').style.width = cpu + '%';
+        }
+        // RAM %
+        if (ram !== undefined) {
+            document.getElementById('v-r').textContent = Math.round(ram) + '%';
+            document.getElementById('b-r').style.width = ram + '%';
+        }
+        // GPU uso %
+        if (gpuUso !== undefined && gpuUso !== null) {
+            document.getElementById('v-g').textContent = Math.round(gpuUso) + '%';
+            document.getElementById('b-g').style.width = Math.min(gpuUso, 100) + '%';
+        }
+        // GPU Temperatura
+        if (gpuTemp !== undefined && gpuTemp !== null && gpuTemp > 0) {
+            document.getElementById('v-gt').textContent = Math.round(gpuTemp) + '°C';
+            // Mapear temperatura: 0°C = 0%, 100°C = 100%
+            const gpuTempPct = Math.min(gpuTemp, 100);
+            document.getElementById('b-gt').style.width = gpuTempPct + '%';
+            // Color según temperatura
+            const barWrap = document.getElementById('bar-gpu-temp');
+            barWrap.className = 'bar-t' + (gpuTemp >= 85 ? ' bar-temp-hot' : gpuTemp >= 70 ? ' bar-temp-warn' : '');
+            const valEl = document.getElementById('v-gt');
+            valEl.className = gpuTemp >= 85 ? 'er' : gpuTemp >= 70 ? 'wr' : 'ok';
+        }
+        // CPU Temperatura
+        if (cpuTemp !== undefined && cpuTemp !== null && cpuTemp > 0) {
+            document.getElementById('v-ct').textContent = Math.round(cpuTemp) + '°C';
+            const cpuTempPct = Math.min(cpuTemp, 100);
+            document.getElementById('b-ct').style.width = cpuTempPct + '%';
+            const barWrap = document.getElementById('bar-cpu-temp');
+            barWrap.className = 'bar-t' + (cpuTemp >= 90 ? ' bar-temp-hot' : cpuTemp >= 75 ? ' bar-temp-warn' : '');
+            const valCtEl = document.getElementById('v-ct');
+            valCtEl.className = cpuTemp >= 90 ? 'er' : cpuTemp >= 75 ? 'wr' : 'ok';
+        }
+        // Nombre GPU
+        if (gpuNombre && gpuNombre !== 'N/A' && gpuNombre !== '') {
+            document.getElementById('gpu-name').textContent = gpuNombre;
+        }
+        // Actualizar load display
+        if (cpu !== undefined) {
+            const loadEl = document.getElementById('cpu-load-ai');
+            loadEl.textContent = 'CPU ' + Math.round(cpu) + '%';
+            loadEl.className = cpu > 80 ? 'er' : cpu > 50 ? 'wr' : 'ok';
+        }
+    }
+
+    function updateStatus(estado, color) {
+        const el = document.getElementById('main-status');
+        el.textContent = 'STATUS: ' + estado;
+        el.style.color = color;
+        el.style.textShadow = `0 0 5px ${color}`;
+        document.getElementById('vcs').textContent = estado;
+
+        // Sincronizar con el thought visualizer
+        const tipoMap = {
+            'PROCESANDO...': 'thinking',
+            'ANALIZANDO...': 'thinking',
+            'ESCUCHANDO...': 'action',
+            'STANDBY':       'neutral',
+            'ERROR':         'error',
+        };
+        const tipo = tipoMap[estado] || 'neutral';
+        setThinkingState(estado !== 'STANDBY' && estado !== 'NOMINAL', estado, tipo);
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  THOUGHT VISUALIZER — MEJORADO
+    // ═══════════════════════════════════════════════════════
+    const tvEl = document.getElementById('tv');
+    const tvLoader = document.getElementById('tv-loader');
+    const tvActionLabel = document.getElementById('tv-action-label');
+    const tvProgressWrap = document.getElementById('tv-progress-wrap');
+    const tvProgressFill = document.getElementById('tv-progress-fill');
+    let tvProgressInterval = null;
+
+    // Mapa de emojis y tipos según el contenido del mensaje
+    const tvKeywords = [
+        { kw: ['SPOTIFY', 'MUSIC', 'CANCIÓN', 'MUSICA'], tag: '🎵', tipo: 'action' },
+        { kw: ['BLENDER', '3D', 'MODELO', 'BPY'],        tag: '🧊', tipo: 'action' },
+        { kw: ['CÓDIGO', 'CODE', 'SCRIPT', 'PYTHON'],    tag: '⚙️', tipo: 'action' },
+        { kw: ['ERROR', 'FALLO', 'FAILED'],              tag: '❌', tipo: 'error' },
+        { kw: ['OK', '✅', 'ÉXITO', 'LISTO', 'COMPLETA'], tag: '✅', tipo: 'success' },
+        { kw: ['BÓVEDA', 'CLAVE', 'ENCRIPTA'],           tag: '🔐', tipo: 'neutral' },
+        { kw: ['WEB', 'CHROME', 'BROWSE', 'URL'],        tag: '🌐', tipo: 'action' },
+        { kw: ['MEMORIA', 'RECUERDO', 'APRENDIZ'],       tag: '🧠', tipo: 'thinking' },
+        { kw: ['GMAIL', 'EMAIL', 'CORREO'],              tag: '📧', tipo: 'action' },
+        { kw: ['WORD', 'EXCEL', 'PDF', 'DOCUME'],        tag: '📄', tipo: 'action' },
+        { kw: ['GRABANDO', 'CÁMARA', 'MIC'],             tag: '🎙️', tipo: 'action' },
+        { kw: ['STEAM', 'JUEGO', 'GAME'],                tag: '🎮', tipo: 'action' },
+        { kw: ['ANALIZANDO', 'PROCESANDO', 'PENSANDO'],  tag: '🔵', tipo: 'thinking' },
+    ];
+
+    function classifyThought(msg) {
+        const upper = msg.toUpperCase();
+        for (const rule of tvKeywords) {
+            if (rule.kw.some(k => upper.includes(k))) {
+                return { tag: rule.tag, tipo: rule.tipo };
+            }
+        }
+        return { tag: '▷', tipo: 'neutral' };
+    }
+
+    function atv(msg, tipoOverride) {
+        const { tag, tipo } = classifyThought(msg);
+        const tipoFinal = tipoOverride || tipo;
+        const e = document.createElement('div');
+        e.className = `tv-entry tv-${tipoFinal}`;
+        e.innerHTML = `<span class="tv-tag">${tag}</span>${msg}`;
+        tvEl.appendChild(e);
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => e.classList.add('visible'));
+        });
+        tvEl.scrollTop = tvEl.scrollHeight;
+        // Limitar a 30 entradas
+        while (tvEl.children.length > 30) tvEl.removeChild(tvEl.firstChild);
+    }
+
+    function setThinkingState(active, label, tipo) {
+        if (active) {
+            tvLoader.className = 'tv-loader active';
+            tvActionLabel.textContent = label || 'PROCESANDO...';
+            // Color del loader según tipo
+            const colorMap = { thinking: '#3498db', action: '#f39c12', error: '#e74c3c', success: '#2ecc71', neutral: '#ff3b14' };
+            const c = colorMap[tipo] || '#3498db';
+            tvLoader.style.color = c;
+            document.querySelectorAll('.tv-dots span').forEach(s => s.style.background = c);
+            // Barra de progreso animada
+            tvProgressWrap.style.display = 'block';
+            if (tvProgressInterval) clearInterval(tvProgressInterval);
+            let pct = 0;
+            tvProgressFill.style.width = '0%';
+            tvProgressFill.style.background = c;
+            tvProgressFill.style.boxShadow = `0 0 6px ${c}`;
+            tvProgressInterval = setInterval(() => {
+                pct = Math.min(pct + Math.random() * 8, 90);
+                tvProgressFill.style.width = pct + '%';
+            }, 200);
+        } else {
+            // Completar la barra al 100%
+            tvProgressFill.style.width = '100%';
+            setTimeout(() => {
+                tvLoader.className = 'tv-loader';
+                tvProgressWrap.style.display = 'none';
+                tvProgressFill.style.width = '0%';
+                if (tvProgressInterval) { clearInterval(tvProgressInterval); tvProgressInterval = null; }
+            }, 400);
+        }
+    }
+
+    function clearThoughts() {
+        tvEl.innerHTML = '';
+        atv('Log limpiado.', 'neutral');
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  LOG PRINCIPAL
+    // ═══════════════════════════════════════════════════════
+    const sl = document.getElementById('sl'), inC = document.getElementById('t-in'), vcs = document.getElementById('vcs');
+
+    function lg(snd, msg) {
+        const e = document.createElement('div');
+        e.className = 'll';
+        e.innerHTML = `<span class="l-ts">[${p(new Date().getHours())}:${p(new Date().getMinutes())}:${p(new Date().getSeconds())}]</span><span><b>${snd}:</b> ${msg}</span>`;
+        sl.appendChild(e);
+        sl.scrollTop = sl.scrollHeight;
+    }
+
+    function addLogEntry(sender, message) {
+        lg(sender, message);
+        // También mostrar en el thought visualizer si es relevante
+        const upper = (sender + ' ' + message).toUpperCase();
+        const important = ['BLENDER', 'SPOTIFY', 'ERROR', 'CÓDIGO', 'WORD', 'EXCEL', 'PDF', 'STEAM', 'GRABANDO', 'ANALIZANDO', 'MEMORIA', 'BÓVEDA', 'ENJAMBRE'];
+        if (important.some(k => upper.includes(k))) {
+            atv(`[${sender}] ${message.slice(0, 60)}${message.length > 60 ? '...' : ''}`);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  INPUT DEL CHAT
+    // ═══════════════════════════════════════════════════════
+    inC.addEventListener('keydown', async e => {
+        if (e.key === 'Enter') {
+            const v = inC.value.trim();
+            if (!v) return;
+            inC.disabled = true;
+            inC.value = '';
+            lg('OPERATOR', v);
+            vcs.textContent = 'LISTENING';
+            atv(`Recibido: "${v.slice(0,50)}${v.length>50?'...':''}"`, 'thinking');
+            setThinkingState(true, 'PROCESANDO COMANDO...', 'thinking');
+            try {
+                if (window.pywebview && window.pywebview.api && window.pywebview.api.procesar_comando) {
+                    await window.pywebview.api.procesar_comando(v);
+                } else {
+                    setTimeout(() => { lg('SYS', 'API no conectada.'); atv('API Python no disponible.', 'error'); }, 500);
+                }
+            } catch (err) {
+                lg('SYS_ERR', 'Error de conexión.');
+                atv('Error de conexión con Python.', 'error');
+            } finally {
+                setTimeout(() => {
+                    inC.disabled = false;
+                    inC.focus();
+                    vcs.textContent = 'IDLE';
+                    setThinkingState(false);
+                }, 1200);
+            }
+        }
+    });
+
+    // ═══════════════════════════════════════════════════════
+    //  VOICE CORE (AVATAR)
+    // ═══════════════════════════════════════════════════════
+    const vi = document.getElementById('vc-img'), vb = document.getElementById('vc-cb'), v3d = document.getElementById('vc-3d');
+    let currentMode = '3d';
+
+    function vc(m, b) {
+        document.querySelectorAll('.vc-bs .btn:not(.dsgn)').forEach(btn => btn.classList.remove('a'));
+        if (b && !b.classList.contains('dsgn')) b.classList.add('a');
+        vi.style.display = 'none'; vb.style.display = 'none'; v3d.style.display = 'none';
+        currentMode = m;
+        if (m === '3d_model') { v3d.style.display = 'block'; }
+        else if (m === '3d') { vb.style.display = 'block'; }
+        else if (m === 'img' || m === 'gif') {
+            vi.style.display = 'block';
+            if (!vi.getAttribute('data-loaded')) {
+                const label = m === 'gif' ? 'GIF' : 'IMG';
+                vi.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="%23111"/><text x="50%25" y="42%25" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-size="14" font-family="monospace">' + label + '</text><text x="50%25" y="62%25" dominant-baseline="middle" text-anchor="middle" fill="%23333" font-size="10" font-family="monospace">UPLOAD</text></svg>';
+            }
+        }
+    }
+
+    document.getElementById('fi').addEventListener('change', e => {
+        const f = e.target.files[0]; if (!f) return;
+        const ext = f.name.split('.').pop().toLowerCase();
+        const isGif = f.type === 'image/gif' || ext === 'gif';
+        const is3D = ext === 'glb' || ext === 'gltf';
+        if (is3D) {
+            if (v3d.src && v3d.src.startsWith('blob:')) URL.revokeObjectURL(v3d.src);
+            v3d.src = URL.createObjectURL(f); vc('3d_model');
+            const btn3d = document.querySelectorAll('.vc-bs .btn')[2];
+            if (btn3d) { document.querySelectorAll('.vc-bs .btn:not(.dsgn)').forEach(b => b.classList.remove('a')); btn3d.classList.add('a'); }
+            lg('SYS', `Modelo 3D cargado: ${f.name}`);
+        } else {
+            const r = new FileReader();
+            r.onload = ev => {
+                vi.src = ev.target.result; vi.setAttribute('data-loaded', 'true');
+                const mode = isGif ? 'gif' : 'img'; vc(mode);
+                const btns = document.querySelectorAll('.vc-bs .btn:not(.dsgn)');
+                btns.forEach(b => b.classList.remove('a'));
+                if (btns[isGif ? 1 : 0]) btns[isGif ? 1 : 0].classList.add('a');
+                lg('SYS', `${isGif ? 'GIF' : 'Imagen'} cargada: ${f.name}`);
+            };
+            r.readAsDataURL(f);
+        }
+        e.target.value = '';
+    });
+
+    // Adjuntar archivos al chat (imagen/video → Python)
+    document.getElementById('chat-file').addEventListener('change', e => {
+        const f = e.target.files[0];
+        if (f) {
+            lg('OPERATOR', `[ARCHIVO ADJUNTO]: ${f.name}`);
+            atv(`Adjunto recibido: ${f.name}`, 'action');
+            // Llamar a Python para analizar si está disponible
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.analizar_archivo_adjunto) {
+                // Pasar la ruta del archivo no funciona desde JS directamente,
+                // solo logueamos y le pedimos al usuario que use el comando [ADJUNTAR]
+                lg('SYS', 'Para analizar con IA usa el comando: analiza este archivo (y mencioná el nombre)');
+            }
+        }
+    });
+
+    // ═══════════════════════════════════════════════════════
+    //  MICRÓFONO
+    // ═══════════════════════════════════════════════════════
+    function activarPTT() {
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.iniciar_grabacion_ptt) {
+            atv('Activando micrófono PTT...', 'action');
+            setThinkingState(true, 'ESCUCHANDO...', 'action');
+            window.pywebview.api.iniciar_grabacion_ptt();
+        } else { lg('SYS_ERR', 'Módulo de audio no conectado.'); }
+    }
+
+    let oidoActivo = false;
+    function toggleOido() {
+        oidoActivo = !oidoActivo;
+        const btn = document.getElementById('btn-always');
+        if (oidoActivo) { btn.textContent = '🔴 OÍDO ACTIVO (ON)'; btn.classList.add('a'); atv('Escucha continua ACTIVADA.', 'action'); }
+        else { btn.textContent = '🔴 OÍDO: APAGADO'; btn.classList.remove('a'); atv('Escucha continua desactivada.', 'neutral'); }
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.toggle_oido) {
+            window.pywebview.api.toggle_oido(oidoActivo);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  WEBCAM
+    // ═══════════════════════════════════════════════════════
+    const videoElement = document.getElementById('webcam');
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoElement.srcObject = stream;
+                lg('SYS_OPTIC', 'Sensor óptico en línea.');
+                document.getElementById('vision-status').textContent = 'ONLINE';
+                document.getElementById('vision-status').className = 'ok';
+            })
+            .catch(() => {
+                lg('SYS_ERR', 'Cámara no detectada o permiso denegado.');
+                document.getElementById('vision-status').textContent = 'OFFLINE';
+                document.getElementById('vision-status').className = 'er';
+            });
+    }
+
+    function capturarDibujo() {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = videoElement.videoWidth || 640;
+        tempCanvas.height = videoElement.videoHeight || 480;
+        tempCanvas.getContext('2d').drawImage(videoElement, 0, 0, tempCanvas.width, tempCanvas.height);
+        const imageData = tempCanvas.toDataURL('image/jpeg', 0.8);
+        lg('SYS_OPTIC', 'Captura tomada. Enviando a Gemini Vision...');
+        atv('Captura de cámara enviada a análisis visual.', 'thinking');
+        setThinkingState(true, 'ANALIZANDO IMAGEN...', 'thinking');
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.procesar_imagen_webcam) {
+            window.pywebview.api.procesar_imagen_webcam(imageData);
+        } else { lg('SADSAD', 'Módulo de visión de Python aún no conectado.'); }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  INTEGRACIONES Y STUDIO DE DISEÑOS
+    // ═══════════════════════════════════════════════════════
+    function openIntegrations() { document.getElementById('intModal').style.display = 'flex'; }
+    function closeIntegrations() { document.getElementById('intModal').style.display = 'none'; }
+    function saveIntegrations() { lg('SYS', 'Credenciales guardadas localmente.'); closeIntegrations(); }
+
+    let tempDesign = { theme: 'nerv', avatar: '3d' };
+    let isCustomMode = false;
+
+    function openDesignModal() { document.getElementById('designModal').style.display = 'flex'; }
+    function closeDesignModal() { document.getElementById('designModal').style.display = 'none'; }
+
+    document.getElementById('design-upload').addEventListener('change', e => {
+        const f = e.target.files[0];
+        if (f) { lg('SYS', `Importando diseño: ${f.name}`); alert('Diseño importado (Simulación).'); }
+    });
+
+    function selectDesign(el, name, theme, avatarType) {
+        isCustomMode = false;
+        document.querySelectorAll('.dm-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('dm-preview-box').style.display = 'block';
+        document.getElementById('dm-builder-box').style.display = 'none';
+        document.getElementById('dmPreviewName').textContent = name;
+        document.getElementById('dmPreviewTheme').textContent = theme.toUpperCase();
+        document.getElementById('dmPreviewAvatar').textContent = avatarType.toUpperCase();
+        tempDesign.theme = theme; tempDesign.avatar = avatarType;
+    }
+
+    function openBuilder(el) {
+        isCustomMode = true;
+        document.querySelectorAll('.dm-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('dm-preview-box').style.display = 'none';
+        document.getElementById('dm-builder-box').style.display = 'block';
+    }
+
+    function applyDesign() {
+        if (isCustomMode) {
+            const color = document.getElementById('c-color').value;
+            const bg    = document.getElementById('c-bg').value;
+            const font  = document.getElementById('c-font').value;
+            const scan  = document.getElementById('c-scan').value;
+            const ava   = document.getElementById('c-avatar').value;
+            document.documentElement.style.setProperty('--pri', color);
+            document.documentElement.style.setProperty('--txt', color);
+            document.documentElement.style.setProperty('--bg', bg);
+            document.documentElement.style.setProperty('--pan', 'rgba(10,10,10,0.7)');
+            document.documentElement.style.setProperty('--f1', font);
+            document.documentElement.style.setProperty('--f2', font);
+            document.documentElement.style.setProperty('--scn', scan);
+            document.body.className = 'custom';
+            vc(ava);
+            lg('SYS', 'Diseño personalizado aplicado.');
+        } else {
+            ['--pri','--txt','--bg','--pan','--f1','--f2','--scn'].forEach(v => document.documentElement.style.removeProperty(v));
+            document.body.className = tempDesign.theme;
+            document.getElementById('th-sel').value = tempDesign.theme;
+            vc(tempDesign.avatar);
+            lg('SYS', `Diseño aplicado: ${document.getElementById('dmPreviewName').textContent}`);
+        }
+        closeDesignModal();
+    }
+
+    document.getElementById('th-sel').addEventListener('change', e => document.body.className = e.target.value);
+    document.getElementById('clr').addEventListener('input', e => {
+        if (document.body.classList.contains('minimal')) document.body.style.setProperty('--pri', e.target.value);
+    });
+    </script>
+</body>
+</html>

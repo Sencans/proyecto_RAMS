@@ -1,0 +1,198 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberDrive Autos - El Futuro es Ahora</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        :root {
+            --neon-blue: #00aaff;
+            --neon-pink: #ff00ff;
+            --background-color: #0b021d;
+            --card-background: #1a0a3a;
+            --text-color: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            /* El efecto neón se consigue con múltiples sombras de texto */
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px var(--neon-pink),
+                0 0 30px var(--neon-pink),
+                0 0 40px var(--neon-pink),
+                0 0 55px var(--neon-pink),
+                0 0 75px var(--neon-pink);
+            transition: text-shadow 0.1s ease-in-out;
+        }
+
+        .flicker {
+            text-shadow:
+                0 0 5px #fff,
+                0 0 8px #fff,
+                0 0 15px var(--neon-pink),
+                0 0 20px var(--neon-pink);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            margin-top: 0.5rem;
+        }
+
+        #car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .car-card {
+            background-color: var(--card-background);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            overflow: hidden;
+            /* La sombra de la caja da el resplandor a la tarjeta entera */
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.5), inset 0 0 10px rgba(0, 170, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .car-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.8), inset 0 0 15px rgba(0, 170, 255, 0.5);
+        }
+
+        .car-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        .car-info {
+            padding: 1.5rem;
+        }
+
+        .car-info h3 {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+            margin-bottom: 1rem;
+        }
+
+        .car-info p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .buy-button {
+            background-color: transparent;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 0.8rem 1.5rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .buy-button:hover {
+            background-color: var(--neon-pink);
+            color: var(--background-color);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="main-title" id="mainTitle">CyberDrive Autos</h1>
+        <p class="subtitle">Conduce el Mañana, Hoy.</p>
+    </header>
+
+    <main id="car-grid">
+        <div class="car-card">
+            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070" alt="Deportivo Neón">
+            <div class="car-info">
+                <h3>Vortex GT-R</h3>
+                <p><strong>Año:</strong> 2077</p>
+                <p><strong>Kilometraje:</strong> 5,000 km</p>
+                <p><strong>Precio:</strong> ₿ 3.5</p>
+                <button class="buy-button">Consultar</button>
+            </div>
+        </div>
+
+        <div class="car-card">
+            <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070" alt="Superdeportivo Rojo">
+            <div class="car-info">
+                <h3>Spectre X</h3>
+                <p><strong>Año:</strong> 2076</p>
+                <p><strong>Kilometraje:</strong> 12,300 km</p>
+                <p><strong>Precio:</strong> ₿ 2.8</p>
+                <button class="buy-button">Consultar</button>
+            </div>
+        </div>
+
+        <div class="car-card">
+            <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=2070" alt="Clásico Moderno">
+            <div class="car-info">
+                <h3>Nova-Classic</h3>
+                <p><strong>Año:</strong> 2075</p>
+                <p><strong>Kilometraje:</strong> 25,000 km</p>
+                <p><strong>Precio:</strong> ₿ 1.9</p>
+                <button class="buy-button">Consultar</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Pequeño script para hacer que el título principal parpadee como un letrero de neón
+        const title = document.getElementById('mainTitle');
+
+        setInterval(() => {
+            // El 10% de las veces, aplica el efecto de parpadeo
+            if (Math.random() < 0.1) {
+                title.classList.add('flicker');
+                
+                // Quita el efecto después de un instante
+                setTimeout(() => {
+                    title.classList.remove('flicker');
+                }, 150); // Duración del parpadeo
+            }
+        }, 500); // Revisa cada medio segundo
+    </script>
+
+</body>
+</html>
+```
