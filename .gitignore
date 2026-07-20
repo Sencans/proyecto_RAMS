@@ -1,0 +1,33 @@
+# ===== Secretos y configuración local (¡NUNCA subir!) =====
+config_rams.txt
+*.key
+.env
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+dist/
+*.egg-info/
+
+# ===== Datos en tiempo de ejecución / estado =====
+memoria_profunda.db
+*.db
+*.sqlite3
+capsulas_tiempo.json
+recordatorios.json
+
+# ===== Espacio de trabajo generado por la IA =====
+Workspace_RAMS/
+
+# ===== Sistema operativo / editor =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

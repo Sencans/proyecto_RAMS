@@ -1,66 +1,116 @@
-# 👑 R.A.M.S. V2.0 — MAGI Terminal
+<div align="center">
 
-![R.A.M.S. Version](https://img.shields.io/badge/Versión-2.0-red.svg)
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
-![Gemini API](https://img.shields.io/badge/Motor-Gemini_AI-orange.svg)
+# 👑 R.A.M.S. — MAGI Terminal
 
-R.A.M.S. (MAGI Terminal) es un asistente virtual avanzado y altamente personalizable de código abierto. Más que un simple chatbot, es un "Sistema Operativo de IA" con personalidad propia, capaz de interactuar con tu computadora, ver tu pantalla, controlar tu música, organizar tus archivos y aprender de sus errores.
+**Un "Sistema Operativo de IA" de escritorio: voz, visión, control del PC y memoria, con una interfaz HUD estilo NERV/Evangelion.**
+
+[![Versión](https://img.shields.io/badge/Versión-2.0-red.svg?style=flat-square)](#)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Motor: Gemini](https://img.shields.io/badge/Motor-Google_Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![Plataforma](https://img.shields.io/badge/Plataforma-Windows_10%2F11-0078D6?style=flat-square&logo=windows&logoColor=white)](#)
+[![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg?style=flat-square)](LICENSE)
+
+</div>
+
+---
+
+R.A.M.S. es un asistente virtual avanzado y altamente personalizable de código abierto. Más que un chatbot, es un asistente con personalidad propia capaz de interactuar con tu computadora: ve tu pantalla, controla tu música, organiza tus archivos, genera documentos y aprende de sus errores.
+
+## 📑 Tabla de Contenidos
+
+- [Características principales](#-características-principales)
+- [Requisitos](#-requisitos)
+- [Instalación y primer uso](#-instalación-y-primer-uso)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Privacidad y seguridad](#️-privacidad-y-seguridad)
+- [Licencia](#-licencia)
+
+---
 
 ## ✨ Características Principales
 
-Tu asistente cuenta con un arsenal de herramientas integradas:
+* **👁️ Visión computacional:** captura y analiza tu pantalla en tiempo real, o lee la señal de tu cámara web.
+* **🎵 Control total de Spotify:** reproduce canciones, cambia de pista, ajusta el volumen y consulta qué suena.
+* **🎮 Modos de entorno:**
+    * *Modo Juego*: abre Steam y Xbox Game Bar y prepara el ambiente automáticamente.
+    * *Modo Chamba*: abre tus IAs y buscadores favoritos de golpe para trabajar.
+* **👻 Modo Fantasma:** la IA puede minimizar ventanas, abrir el Bloc de Notas y escribirte mensajes con su propia "conciencia".
+* **🗂️ Organizador inteligente:** ordena carpetas clasificando imágenes, vídeos, documentos y código automáticamente.
+* **📝 Creador de documentos:** genera archivos Word, Excel (con gráficos) y PDF con un solo comando de voz o texto.
+* **🧠 Memoria y cápsulas de tiempo:** aprende de errores de código, guarda recordatorios programados y te envía mensajes al futuro.
+* **🎙️ TTS y voz:** usa Edge TTS para hablar de forma fluida; integrable con backends de clonación de voz.
 
-* **👁️ Visión Computacional:** Puede tomar capturas de pantalla en tiempo real y analizar lo que estás viendo, o leer la señal de tu cámara web.
-* **🎵 Control Total de Spotify:** Reproduce canciones, cambia de pista, ajusta el volumen y revisa qué está sonando sin tocar la aplicación.
-* **🎮 Modos de Entorno:**
-    * `Modo Juego`: Abre Steam, Xbox Game Bar y pone "Welcome to the Jungle" automáticamente.
-    * `Modo Chamba`: Prepara tu entorno de trabajo abriendo tus IAs y buscadores favoritos de golpe.
-* **👻 Modo Fantasma (Tomar Control):** Inspirado en DDLC, la IA puede minimizar tus ventanas, abrir el Bloc de Notas y escribirte mensajes directamente con su propia "conciencia".
-* **🗂️ Organizador Inteligente:** Ordena carpetas caóticas clasificando imágenes, videos, documentos y código automáticamente.
-* **📝 Creador de Documentos:** Genera archivos Word, Excel (con gráficos) y PDF visualmente atractivos con un solo comando de voz o texto.
-* **🧠 Memoria y Cápsulas de Tiempo:** Aprende de los errores de código, guarda recordatorios programados y te envía mensajes al futuro mediante "Cápsulas de tiempo".
-* **🎙️ Clonación y TTS:** Usa Edge TTS para hablar de forma fluida y puede integrarse con ElevenLabs para clonar voces.
+---
+
+## 📋 Requisitos
+
+- **Python 3.10 o superior**
+- **Windows 10 / 11** (usa APIs específicas de Windows para el control del sistema)
+- Una **API Key de Google Gemini** ([obtenla aquí](https://aistudio.google.com/app/apikey))
+
+---
 
 ## 🚀 Instalación y Primer Uso
 
-R.A.M.S. cuenta con un sistema de configuración inicial automático. No necesitas quemar tus contraseñas en el código.
+```bash
+# 1. Clona el repositorio
+git clone https://github.com/Sencans/proyecto_RAMS.git
+cd proyecto_RAMS
 
-1. **Clona este repositorio:**
-   ```bash
-   git clone [https://github.com/Sencans/proyecto_RAMS.git](https://github.com/Sencans/proyecto_RAMS.git)
-   cd proyecto_RAMS
-Instala las dependencias necesarias:
-Asegúrate de tener instaladas librerías como customtkinter, webview, google-generativeai, spotipy, opencv-python, edge-tts, SpeechRecognition, etc.
+# 2. (Recomendado) Crea un entorno virtual
+python -m venv .venv
+.venv\Scripts\activate
 
-Inicia el sistema:
+# 3. Instala las dependencias
+pip install -r requirements.txt
 
-Bash
-python test2.py
-Inicialización MAGI:
-Al correrlo por primera vez, el sistema detectará que no hay configuración. Se abrirá una interfaz gráfica negra pidiéndote:
+# 4. Inicia el sistema
+python main.py
+```
 
-El nombre que le quieres dar a tu IA.
+### Inicialización MAGI
 
-Tu API Key de Google Gemini.
+Al ejecutarlo por primera vez, el sistema detecta que no hay configuración y abre una interfaz gráfica que te pide:
 
-(Opcional) Tus datos SMTP para envío de correos.
+- El **nombre** que quieres darle a tu IA.
+- Tu **API Key de Google Gemini**.
+- *(Opcional)* Tus datos **SMTP** para el envío de correos.
 
-Estos datos se guardarán localmente en un archivo config_rams.txt de forma segura.
+Estos datos se guardan localmente en `config_rams.txt`, que está **excluido del control de versiones** por el `.gitignore` para proteger tus claves.
 
-⚙️ Estructura del Workspace
-El sistema opera dentro de una carpeta segura llamada Workspace_RAMS. Aquí es donde:
+---
 
-Se guardan las imágenes generadas y los modelos 3D interpretados (Blender).
+## 📂 Estructura del Proyecto
 
-Se almacenan las memorias (RAMS_REGLAS.md, capsulas_tiempo.json).
+```
+proyecto_RAMS/
+├── main.py             # Núcleo del asistente (IA, voz, visión, control del SO)
+├── hud.html            # Interfaz HUD estilo NERV/MAGI (mostrada vía pywebview)
+├── memoria_rams.py     # Módulo de memoria persistente (SQLite)
+├── RAMS_REGLAS.md      # Reglas / personalidad del asistente
+├── requirements.txt    # Dependencias de Python
+└── Workspace_RAMS/     # Carpeta de trabajo donde la IA genera documentos y scripts
+```
 
-Se exportan los documentos Word, Excel y PDF creados por la IA.
+---
 
-⚠️ Notas de Privacidad y Seguridad
-APIs: Nunca subas el archivo config_rams.txt a repositorios públicos. Mantén tus API Keys seguras.
+## ⚠️ Privacidad y Seguridad
 
-Control del PC: Este script tiene permisos para mover el mouse, teclear, abrir archivos y capturar pantalla. Úsalo bajo tu propio riesgo y supervisión.
+- **API Keys:** el archivo `config_rams.txt` contiene tus claves y **nunca debe subirse** a un repositorio público. Ya está incluido en `.gitignore`.
+- **Control del PC:** este programa puede mover el ratón, teclear, abrir archivos y capturar la pantalla. Úsalo bajo tu propia responsabilidad y supervisión.
 
-Desarrollado como núcleo central de asistencia personal impulsado por inteligencia artificial.
+---
 
-SOLO FUNCIONA EN WINDOWS 11/10
+## 📄 Licencia
+
+Distribuido bajo la licencia **MIT**. Consulta el archivo [`LICENSE`](LICENSE) para más información.
+
+---
+
+<div align="center">
+
+Hecho con 💜 por [**Sencanxg**](https://github.com/Sencans) · Colombia 🇨🇴
+
+*"Si el sistema no tiene personalidad, solo es una calculadora rápida."*
+
+</div>
